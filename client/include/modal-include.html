@@ -1,0 +1,44 @@
+<template name="modalCategory">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Category</h4>
+                </div>
+
+                <div class="modal-body">
+                    {{#with item}}
+                    <form role="form">
+                    
+                    <input type="hidden" value="{{_id}}" name="id"/>
+                    <table class="table table-bordered tbl-checkout">
+                        <tbody>
+                            <tr>
+                                <td>Name</td>
+                                <td>
+                                    <input type="text" name="{{name}}" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Sequence</td>
+                                <td>
+                                    <input type="text" name="{{description}}" class="form-control" />
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    
+                    </form>
+                    {{/with}}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success action-submit" >Submit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</template>
