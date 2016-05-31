@@ -1,8 +1,23 @@
 Meteor.startup(function() {
-  Uploader.finished = function(index, file) {
-  	GROWL.info('Information is updated with new image');
-    Uploads.insert(file);
-  };
+
+	$(window).bind('beforeunload', function() {
+		Session.setPersistent('unloadTime', new Date().getTime());
+	});
+
+	$(window).bind('load' , function(){
+		// 1. check is this refresh or close browser... 
+		var unloadTime = Number(Session.get('unloadTime'));
+		unloadTime = (isNaN(unloadTime)) ? 0 : unloadTime;
+
+		if(  ( (new Date().getTime()) -  unloadTime ) > 10000) // 10 seconds think time... 
+			Session.clearPersistent();
+		
+		//2. generate id if empty... 
+		//Session.clearPersistent();
+		CartUtil.generate();
+
+	});
+
 });
 
 
@@ -53,4 +68,16 @@ Tracker.autorun(function () {
   }
   	
  });
+
+Tracker.autorun(function () {
+	var cartId = Session.get(CONSTANT.SESSION.CART);
+	if(cartId){
+		var filter = {};
+		filter.id = cartId;
+		Meteor.subscribe('cartByFilter',filter);
+	}
+});
+
+
+
 

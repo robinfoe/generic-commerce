@@ -3,41 +3,64 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add Category</h4>
+                    <h4 class="modal-title">{{stateControl.title}} Category</h4>
                 </div>
+                <form class='category-maintain' onkeypress="return event.keyCode != 13;">
+                    <div class="modal-body">
+                        {{#if Template.subscriptionsReady}}
+                            {{#with item}}
+                                {{#unless stateControl.isDeletePending}}
+                                    <input type="hidden" value="{{_id._str}}" name="_id"/>
+                                    <table class="table table-bordered tbl-checkout">
+                                        <tbody>
+                                            <tr>
+                                                <td>Name</td>
+                                                <td>
+                                                    <input id="name" type="text" name="name" value="{{name}}" class="form-control" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Sequence</td>
+                                                <td>
+                                                    <input id="seq" type="number" name="seq" value="{{seq}}" class="form-control" />
+                                                </td>
+                                            </tr>
 
-                <div class="modal-body">
-                    {{#with item}}
-                    <form role="form">
-                    
-                    <input type="hidden" value="{{_id}}" name="id"/>
-                    <table class="table table-bordered tbl-checkout">
-                        <tbody>
-                            <tr>
-                                <td>Name</td>
-                                <td>
-                                    <input type="text" name="{{name}}" class="form-control" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Sequence</td>
-                                <td>
-                                    <input type="text" name="{{description}}" class="form-control" />
-                                </td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                    
-                    </form>
-                    {{/with}}
-                </div>
+                                            <tr>
+                                                <td>Child</td>
+                                                <td>
+                                                      <input id="child" type="text" value="{{childAsString}}" data-role="tagsinput" class="form-control tagsinput" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                {{else}}
+                                    <h1>Are you Sure ?</h1>
+                                    <p class="bg-danger"> 
+                                        You are about to delete Category :: [{{name}}]
+                                    </p>
+                                    <div>
+                                        <button type="button" class="btn btn-info category-delete-cancel" >Cancel</button>
+                                        <button type="button" class="btn btn-danger category-delete-proceed" >Proceed</button>
+                                    </div>
+                                    
+                                {{/unless}}
+                                
+                            {{/with}}
+                        {{/if}}
+                    </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success action-submit" >Submit</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+                    {{#unless stateControl.isDeletePending}}
+                    <div class="modal-footer">
+                        {{#if  stateControl.isEdit}}
+                            <button type="button" class="btn btn-danger category-action-delete" >Delete</button>
+                        {{/if}}
 
+                        <button type="submit" class="btn btn-success" >Submit</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                    {{/unless}}
+                </form>
             </div>
         </div>
     </div>

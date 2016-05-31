@@ -1,0 +1,315 @@
+<!-- ****************************** CATALOGUE List ******************************  -->
+<template name="catalogue">
+	<div class="container main-container">
+		<div class="row">
+	        	{{> includeCategory}}
+
+	        	<div class="clearfix visible-sm"></div>
+	        	<div class="col-lg-9 col-md-9 col-sm-12">
+	        		<div class="col-lg-12 col-sm-12">
+	            		<span class="title">PRODUCTS CATALOGUE
+	            			{{> button_action_control state=stateControl prefix='catalogue' }}
+	            		</span>
+	            	</div>
+	            	{{#if Template.subscriptionsReady}}
+		            	{{#each products}}
+		            		<div class="col-lg-4 col-sm-4 hero-feature text-center">
+				                <div class="thumbnail">
+				                	<a href="/catalogue/preview/{{code}}" class="link-p">
+				                    	<img src="{{helper_extractSplashImage this}}" alt="">
+				                	</a>
+				                    <div class="caption prod-caption">
+				                        <h4>
+				                        	<a href="/catalogue/preview/{{code}}">{{name}}</a>
+				                        	{{#if stateControl.isEdit}}
+												<span class="space-left-4px catalog-edit cursor-pointer glyphicon glyphicon-edit" data='{{this.code}}'></span>
+											{{/if}}
+				                        </h4>
+				                        <p>{{shortDescription}}</p>
+				                        <p>
+				                        	<div class="btn-group">
+					                        	<a href="#" class="btn btn-default">$ {{price}}</a>
+					                        	<a href="#" class="btn btn-primary add-to-cart" data='{{code}}'><i class="fa fa-shopping-cart"></i> Buy</a>
+				                        	</div>
+				                        </p>
+				                    </div>
+				                </div>
+				            </div>
+		            	{{/each}}
+
+		            {{/if}}
+
+
+	        	</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-12"></div>
+			<div class="col-lg-9 col-md-9 col-sm-12">	
+				{{#if Template.subscriptionsReady}}
+					{{helper_generatePagination 'productsCount' }}
+				{{/if}}
+			</div>
+		</div>
+	</div>
+</template>
+
+
+
+
+
+
+
+
+<!-- ****************************** CATALOGUE Preview ******************************  -->
+<template name="catalogue_preview">
+	<div class="container main-container">
+		<div class="row">
+			<div class="col-lg-3 col-md-3 col-sm-12"></div>
+			<div class="clearfix visible-sm"></div>
+			{{#with item}}
+			<div class="col-lg-9 col-md-9 col-sm-12">
+        		<div class="col-lg-12 col-sm-12">
+            		<span class="title">{{name}}</span>
+            	</div>
+
+            	<div class="col-lg-12 col-sm-12 hero-feature">
+            		<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6">
+
+							<div class="product-main-image-container">
+								<!--<img src="images/loader.gif" alt="" class="product-loader"> -->
+								<span class="thumbnail product-main-image">
+									<img src="{{helper_extractSplashImage this}}" alt="">
+								</span>
+							</div>
+
+							<!-- Thumbnail Image -->
+							{{#each item.images}}
+							<div class="col-xs-3 product-thumb-image">
+								<img src="{{path}}" class="thumbnail cursor-pointer image-thumb" alt="" height="84" width="84">
+							</div>
+							{{/each}}
+
+
+						</div>
+
+						<div class="visible-xs">
+							<div class="clearfix"></div>
+						</div>
+
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="well product-short-detail">
+								<div class="row">
+									<div class="the-list">
+										<h3 class="col-xs-12">
+											<!-- <span class="price-old">$169</span> -->
+											${{price}}
+										</h3>
+									</div>
+
+									<div class="clearfix"></div>
+									<hr/>
+									<div class="col-xs-12 input-qty-detail">
+										<input type="text" class="form-control input-qty text-center" value="1">
+										<button class="btn btn-default pull-left"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
+									</div>
+								</div>
+							</div>
+						</div>	
+
+						<div class="clearfix"> </div><br clear="all"/>
+						<div class="col-xs-12 product-detail-tab">
+							<!-- Nav tabs -->
+							<ul class="nav nav-tabs">
+								{{#each item.details}}
+										<li class="{{helper_setActiveStyle @index}}" ><a href="#{{_id._str}}" data-toggle="tab">{{label}} </a></li>
+								{{/each}}
+
+							</ul> <!-- Nav tabs END -->
+
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								{{#each item.details}}
+										<div class="tab-pane {{helper_setActiveStyle @index}}" id="{{_id._str}}">
+											<div class="well">
+												{{helper_outputHtml text}}
+											</div>
+										</div>
+									{{/each}}
+
+							</div> <!-- Tab panes END -->
+							
+						</div>
+
+
+
+					</div>
+            	</div>
+            </div>
+            {{/with}}
+
+
+		</div>
+	</div>
+
+
+
+
+</template>
+
+
+
+
+
+
+
+
+
+<!-- ****************************** CATALOGUE MAINTAIN ******************************  -->
+
+<template name="catalogue_maintain">
+	<div class="container main-container">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				<div class="col-lg-12 col-sm-12">
+	            		<span class="title">ADD - PRODUCTS CATALOGUE</span>
+	            </div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12" style="padding-bottom:10px;">
+				<form class="form-catalogue-maintain" onkeypress="return event.keyCode != 13;" method="POST" enctype="multipart/form-data">
+					
+					<ul class="nav nav-tabs" role="tablist">
+					    <li role="presentation" class="active"><a href="#catalogue-detail-general" aria-controls="general" role="tab" data-toggle="tab">General</a></li>
+					    <li role="presentation"><a href="#catalogue-detail-extras" aria-controls="extras" role="tab" data-toggle="tab">Product Details</a></li>
+					    <li role="presentation"><a href="#catalogue-detail-image" aria-controls="image" role="tab" data-toggle="tab">Images</a></li>
+					</ul>
+					<div class="tab-content">
+					    <div role="tabpanel" class="tab-pane active" id="catalogue-detail-general">
+					    	{{>catalogue_detail_general item=item tags=tags}}
+					    </div>
+					    <div role="tabpanel" class="tab-pane" id="catalogue-detail-extras">
+					    	{{>catalogue_detail_descriptions item=item}}
+					    </div>
+					    <div role="tabpanel" class="tab-pane" id="catalogue-detail-image">
+					    	
+					    	<div class="col-lg-6 col-md-6 col-sm-6" style="padding:10px 10px 10px 10px;">
+					    		{{> upload_bootstrap callbacks=uploadCompleted }}
+					    	</div>
+					    	<div class="clearfix"></div>
+
+					    	<div class="row">
+							{{#each item.images}}
+								<div class="col-lg-2 col-md-2 col-sm-2 hoverable" >
+									<img  height="150" width="150" class="thumbnail" src="{{path}}"/>
+									<div class="hover-button">
+										<button class="btn btn-success action-splash" data-value="{{@index}}" type="button" >
+											<span  class="glyphicon glyphicon-modal-window" ></span>
+										</button>
+						    			<button class="btn btn-danger action-remove"  data-value="{{@index}}" type="button" >
+						    				<span  class="glyphicon glyphicon-trash" ></span>
+						    			</button>
+									</div>
+								</div>
+							{{/each}}
+							</div>
+					    	
+
+
+					    </div>
+				 	</div>
+
+
+						<div class="clearfix"></div>
+	                  	<div class='pull-right'>
+	                  		<button type="submit" class="btn btn-success" >Submit</button>
+                        	<button type="button" class="btn btn-default action-catalogue-back" >Back</button>
+	                  	</div>
+	                  
+				</form>
+			</div>
+		</div>
+	</div>	
+</template>
+
+
+
+
+<template name="catalogue_detail_general">
+	<table style="width:100% !important" class="table table-bordered tbl-checkout">
+	                        <tbody>
+	                        	<tr>
+	                                <td width="20%">Code</td>
+	                                <td>
+	                                    <input id="code" value="{{item.code}}" maxlength="5" type="text" name="code" class="col-md-2 col-sm-2 col-lg-2" />
+	                                </td>
+	                            </tr>
+
+	                            <tr>
+	                                <td>Name</td>
+	                                <td>
+	                                    <input id="name" value="{{item.name}}" type="text" name="name" class="col-md-4 col-sm-4 col-lg-4" />
+	                                </td>
+	                            </tr>
+
+	                            <tr>
+	                                <td>Short Desc</td>
+	                                <td>
+	                                	<textarea id="shortDescription" name="shortDescription" class="col-md-10 col-sm-10 col-lg-10">{{item.shortDescription}}</textarea>
+	                                </td>
+	                            </tr>
+
+	                            
+
+	                            <tr>
+	                                <td>Price</td>
+	                                <td>
+	                                    <input id="price" value="{{item.price}}" type="text" name="price" class="col-md-2 col-sm-2 col-lg-2" />
+	                                </td>
+	                            </tr>
+
+	                            <tr>
+	                                <td>Tags</td>
+	                                <td>
+	                                	<select id="tags" class="select2-tags col-md-7 col-sm-7 col-lg-7" multiple="multiple">
+	                                		{{#each tags}}
+	                                			<option value="{{name}}" {{selectedTag ../item name}} >{{name}}</option>
+	                                			{{#each child}}
+	                                				<option value="{{this}}" {{selectedTag ../../item this}}>{{this}}</option>
+	                                			{{/each}}
+	                                		{{/each}}
+	                                	</select>
+	                                </td>
+	                            </tr>
+
+	                            <tr>
+	                                <td>Published</td>
+	                                <td>
+	                                    <input id="published" value="Y" type="checkbox" />
+	                                </td>
+	                            </tr>
+
+
+	                            
+
+	                            
+	                        </tbody>
+	                   	</table>
+</template>
+
+<template name="catalogue_detail_descriptions">
+	{{#each item.details}}
+		<div>
+			{{label}}
+			<div id="{{label}}" class="summernote">{{helper_outputHtml text}}</div>
+		</div>
+	{{/each}}
+</template>
+
+
+
+
+
