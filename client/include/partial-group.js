@@ -29,7 +29,6 @@ Template.includeHeader.helpers({
 
 Template.includeHeader.events({
 	'click #cart-header' : function(event, template){
-		console.log('clicked');
 		if($('#cart-header').hasClass('open'))
 			$('#cart-header').removeClass('open');
 		else

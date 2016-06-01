@@ -16,8 +16,6 @@ Meteor.publish('cartByFilter', function(filter){ // filter should consist either
 		filter._id = new Mongo.ObjectID(filter.id); 
 		delete filter.id;
 	}
-	console.log(filter);
-
 	return Carts.find(filter);
 });
 
@@ -44,7 +42,7 @@ Meteor.publish('productTypeByCode', function(code) {
 	if(item){
 		return ProductTypes.find({productId : item._id});
 	}
-	return null;
+	return ProductTypes.find({productId : 0});
 });
 
 

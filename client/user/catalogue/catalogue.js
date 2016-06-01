@@ -48,18 +48,7 @@ Template.catalogue.events({
 
     'click .add-to-cart' : function(event,template){
         event.preventDefault();
-        var params = {
-            cartId : CartUtil.getId(),
-            code : event.target.getAttribute('data'),
-            value : 1
-        }
-        Meteor.call(CONSTANT.METHOD.CART.ADD_ITEM,params, function(error,result){
-             if(error){
-                    WebUtil.notify.error(error.reason);
-                }else{
-                    WebUtil.notify.success('Record successfully updated');
-                }
-        });
+        CartUtil.addToCart(event.target.getAttribute('data') , 1);
     },
 });
 
@@ -109,21 +98,21 @@ Template.catalogue_preview.onRendered(function(){
         $('.product-main-image').zoom();
     }
 
-    if ($('.input-qty').exist()) {
-        $('.input-qty').TouchSpin();
-    }
+    if ($('.input-qty').exist()) 
+        $('.input-qty').TouchSpin(CONSTANT.DEFAULT_PARAM.TOUCHSPIN);
+    
 
 });
 
 Template.catalogue_preview.events({
     "click .image-thumb": function (event, template) {
-        
         $('.product-main-image img').attr('src',event.target.getAttribute('src'));
         $('.product-main-image img').load(function(){
             $('.product-loader').hide();
-        })
-
-        
+        });
+    },
+    'click .add-to-cart' : function(event,template){
+        CartUtil.addToCart(WebUtil.getCurrentParams().productCode , Number($('#quantity').val()));
     }
 });
 
@@ -161,7 +150,7 @@ Template.catalogue_maintain.onCreated(function(){
 
     item = new Schema.entity.product.construct(Products.findOne());
     var details = ProductTypes.find({}).fetch();
-    if(details){
+    if(details && details.length > 0){
         _.each(details , function(detail){
             item.details.push(new Schema.entity.product_info.construct(detail));
         });
@@ -170,7 +159,6 @@ Template.catalogue_maintain.onCreated(function(){
         item.details.push(Schema.entity.product_info.constructDescription());
         item.details.push(Schema.entity.product_info.constructSpecification());
     }
-    
     this.templateDictionary.set('item',item);
 
 });

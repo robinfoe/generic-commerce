@@ -4,7 +4,8 @@
 			<div class="col-lg-3 col-md-3 col-sm-12"></div>
 	 	<div class="clearfix visible-sm"></div>
 	 	-->
-
+        <form class="form-cart" onkeypress="return event.keyCode != 13;" method="POST" >
+                
 	 	{{#with carts}}
 	 	<div class="col-lg-12 col-md-12 col-sm-12">
     		<div class="col-lg-12 col-sm-12">
@@ -28,18 +29,21 @@
                         </thead>
                         <tbody>
                         	{{#each this.items}}
-                        	<tr>
+                        	<tr >
                         		<!-- <td class="hidden-xs"></td>-->
-                        		<td><a href="/catalogue/preview/{{code}}">{{name}}</a></td>
+                        		<td>
+                                    <input type="hidden" name="code" value="{{code}}">
+                                    <a href="/catalogue/preview/{{code}}">{{name}}</a>
+                                </td>
                         			<!-- START FROM HERE, need QTY, unit price, total price and grand total --> 
                         		<td>
-                        			<input type="text" name="" value="{{quantity}}" class="input-qty form-control text-center" />
+                        			<input type="text" name="quantity" value="{{quantity}}" class="input-qty form-control text-center" />
                         		</td>
                         		<td class="price">$ {{price}}</td>
                         		<td>$ {{totalPrice}}</td>
                         		<td class="text-center">
-                                    <a href="#" class="remove_cart" rel="2">
-                                    	<i class="fa fa-trash-o"></i>
+                                    <a href="#" class="remove_cart" data="{{code}}" rel="2">
+                                    	<i class="fa fa-trash-o" data="{{code}}" ></i>
                                     </a>
                                 </td>
                         	</tr>
@@ -52,8 +56,12 @@
                     </table>
             	</div>
             	<div class="btn-group btns-cart">
-						<button type="button" class="btn btn-primary" onclick="window.location='catalogue.html'"><i class="fa fa-arrow-circle-left"></i> Continue Shopping</button>
-						<button type="button" class="btn btn-primary">Update Cart</button>
+                        <a href="/catalogue/page/1" class="btn btn-primary" >
+                            <i class="fa fa-arrow-circle-left"></i> 
+                            Continue Shopping
+                        </a>
+						
+						<button type="submit" class="btn btn-primary">Update Cart</button>
 						<button type="button" class="btn btn-primary" onclick="window.location='checkout.html'">Checkout <i class="fa fa-arrow-circle-right"></i></button>
 					</div>
             </div>
@@ -61,11 +69,6 @@
 
         </div> <!-- END CART SECTION -->
         {{/with}}
+        </form>
 	 </div>
-
-
-
-
-
-
 </template>
