@@ -108,7 +108,29 @@
                         </ul>
                     </li>
                 </ul>
-            </div>
+                <div class="pull-right">
+                    <ul class="nav navbar-nav">
+                        {{#if currentUser}}
+                            <li id="user-dropdown" class="nav-dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="glyphicon glyphicon-user"></i>
+                                    {{currentUser.profile.name}}
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/signout">Sign Out</a></li>
+                                </ul>
+                            </li>
+                            {{else}}
+                            <li><a href="#" class="sign-in-btn">Sign in</a></li>
+                        {{/if}}
+                        
+                    </ul>
+                    
+                </div>
+            </div> <!-- end of menu listing -->
+
+            
         </div>
     </nav>
     <!-- End Navigation -->

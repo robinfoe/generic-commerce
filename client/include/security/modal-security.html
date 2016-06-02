@@ -1,0 +1,105 @@
+<template name='userSecurity'>
+	<div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{generateTitle}}</h4>
+                </div>
+
+                <div class="modal-body">
+                	{{#if state.isSignIn}}
+                		{{> userSecuritySignIn }}
+                	{{else}}
+                		{{#if state.isSignUp}}
+                			{{> userSecuritySignUp}}
+                		{{else}}
+							{{> userSecurityForgetPass}}
+                		{{/if}}
+                	{{/if}}
+                </div>
+                <div class="modal-footer">
+                	{{generateNavigationButton}}
+                </div>
+			</div>
+		</div>
+	</div>
+
+</template>
+
+
+
+
+<template name='userSecuritySignIn'>
+	<form class="signin-form">
+		<table class="table table-bordered tbl-checkout" style="width:100%">
+            <tbody>
+                <tr>
+                    <td>Email Address</td>
+                    <td>
+                        <input id="email" type="text" name="email"  class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td>
+                        <input id="password" type="password" name="password"  class="form-control" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+	    <div>
+	      <button type="submit" class="btn btn-primary signin" >Proceed</button>
+	    </div>
+  </form>
+</template>
+
+
+<template name='userSecuritySignUp'>
+	<form class="signup-form">
+		<table class="table table-bordered tbl-checkout" style="width:100%">
+            <tbody>
+            	<tr>
+                    <td>Name</td>
+                    <td>
+                        <input id="name" type="text" name="name"  class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email Address</td>
+                    <td>
+                        <input id="email" type="text" name="email"  class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td>
+                        <input id="password" type="password" name="password"  class="form-control" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+	    <div>
+	      <button type="submit" class="btn btn-primary signup" >Proceed</button>
+	    </div>
+  </form>
+</template>
+
+
+
+<template name='userSecurityForgetPass'>
+	<form class="signin-form">
+		<table class="table table-bordered tbl-checkout" style="width:100%">
+            <tbody>
+                <tr>
+                    <td>Email Address</td>
+                    <td>
+                        <input id="email" type="text" name="email"  class="form-control" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+	    <div>
+	      <button type="submit" class="btn btn-primary forgetpass" >Proceed</button>
+	    </div>
+  </form>
+</template>

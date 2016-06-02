@@ -2,6 +2,11 @@ import { Meteor } from 'meteor/meteor';
 
 Meteor.startup(() => {
   // code to run on server at startup
+	// create admin user.. 
+	if(typeof Accounts.findUserByUsername('poly@admin') == 'undefined'){
+    	var id = Accounts.createUser({username:'poly@admin' , password:'jarvis',profile:{name:'Polyplast'}});
+    	Roles.addUsersToRoles(id, 'admin');
+  	}
 
 
 	var guidGenerator = {
