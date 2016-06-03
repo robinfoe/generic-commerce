@@ -50,17 +50,20 @@ Template.registerHelper("helper_generatePagination", function(countName) {
 
 
 Template.registerHelper("helper_extractSplashImage", function(item) {
-	 var url = '';
-        if(!item.images)
-            return url;
+	return WebUtil.extractSplashImage(item);
+	/*
+	var url = '';
+    if(!item.images)
+        return url;
 
-        var url;
-        var image = _.find(item.images,function(image){
-            return (image.splash =='Y');
-        });
+    var url;
+    var image = _.find(item.images,function(image){
+        return (image.splash =='Y');
+    });
 
-        return (image) ? image.path : (item.images && item.images.length > 0) ?  item.images[0].path : 'no image';
+    return (image) ? image.path : (item.images && item.images.length > 0) ?  item.images[0].path : 'no image';
 
+	*/
 });
 
 
@@ -93,6 +96,11 @@ Template.registerHelper("helper_getCart", function() {
 	});
 
 	return cart;
+});
+
+
+Template.registerHelper("helper_isWebAdmin", function() {
+	return SecurityUtil.role.isWebAdmin();
 });
 
 

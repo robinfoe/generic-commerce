@@ -1,6 +1,7 @@
 Template.includeCategory.onCreated(function(){
     this.templateDictionary = new ReactiveDict();
-    this.templateDictionary.set( 'stateControl', {isEdit : false, allowEdit : true} );
+    SecurityUtil.generateState(this);
+    //this.templateDictionary.set( 'stateControl', {isEdit : false, allowEdit : true} );
     this.subscribe("categories");
 });
 
@@ -8,15 +9,17 @@ Template.includeCategory.onCreated(function(){
 
 Template.includeCategory.events({
     "click .category-button-edit": function (event, template) {
-        var state = template.templateDictionary.get( 'stateControl');
-        state.isEdit = true;
-    	template.templateDictionary.set( 'stateControl', state);
+        SecurityUtil.enableEdit(template);
+       // var state = template.templateDictionary.get( 'stateControl');
+        //state.isEdit = true;
+    	//template.templateDictionary.set( 'stateControl', state);
     },
 
     "click .category-button-done": function (event, template) {
-        var state = template.templateDictionary.get( 'stateControl');
-    	state.isEdit = false;
-    	template.templateDictionary.set( 'stateControl', state);
+        SecurityUtil.disableEdit(template);
+        //var state = template.templateDictionary.get( 'stateControl');
+    	//state.isEdit = false;
+    	//template.templateDictionary.set( 'stateControl', state);
     },
 
      "click .category-button-add": function (event, template) {
@@ -37,10 +40,10 @@ Template.includeCategory.events({
 
 Template.includeCategory.helpers({
 	isEdit : function(){
-        return Template.instance().templateDictionary.get( 'stateControl').isEdit;
+        return SecurityUtil.getStatecontrol(Template.instance()).isEdit;
     },
     stateControl : function(){
-        return Template.instance().templateDictionary.get( 'stateControl');
+        return SecurityUtil.getStatecontrol(Template.instance());
     },
     categories : function(){
         return Categories.find();

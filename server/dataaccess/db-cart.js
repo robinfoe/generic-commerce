@@ -11,8 +11,15 @@ var CartUtil = {
 		return (ptr > items.length) ? -1 : (--ptr);
 	},
 
-	constructItem : function(params){ //code,name,price,quantity
-		var item = {code : params.code, name : params.name , price : params.price, quantity : params.quantity, totalPrice : 0 };
+	constructItem : function(product,quantity){ //code,name,price,quantity
+		var item = {
+			code : product.code, 
+			name : product.name , 
+			price : product.price, 
+			quantity : quantity, 
+			imageUrl : WebUtil.extractSplashImage(product),
+			totalPrice : 0
+		} ;
 		item.totalPrice = item.quantity * item.price;
 		return item;
 	},
@@ -20,6 +27,29 @@ var CartUtil = {
 	sortByname : function(lhs, rhs){
 		return (lhs.name < rhs.name) ?  -1 : ((lhs.name > rhs.name) ? 1 : 0);  
 	},
+
+	mergeCart : function(lhs ,rhs){
+		_.each(rhs.items , function(item){
+			var newItem = _.find(lhs.items, function(currItem){ return currItem.code == item.code;});
+			if(newItem){
+				newItem.quantity += item.quantity;
+				newItem.totalPrice = newItem.quantity * newItem.price;
+			}else{
+				newItem = item;
+				lhs.items.push(newItem);
+			}
+		});
+		return lhs;
+	},
+
+	calculateTotalPrice : function(cart){
+		cart.grandTotal = 0;
+		_.each(cart.items , function(item){
+			cart.grandTotal += item.totalPrice;
+		});
+
+		return cart;
+	}
 
 
 
@@ -33,6 +63,28 @@ Meteor.methods({
 		
 		return itemId;
 	},
+
+
+	'cart.mergeCart' : function(params){ // cartId
+		var currentCart = Carts.findOne({_id : new Mongo.ObjectID(params.cartId)});
+		var carts = Carts.find({userId : this.userId} ,{sort : {createdDate : -1}} ).fetch();
+		if(carts.length > 0){
+			var cart = carts[0];
+			currentCart = CartUtil.mergeCart(currentCart , cart);
+			currentCart = CartUtil.calculateTotalPrice(currentCart);
+			currentCart.userId = Meteor.user()._id;
+
+			Carts.remove(cart._id);
+		}
+
+		Carts.update(currentCart._id, {$set : {
+			userId : this.userId,
+			items : currentCart.items,
+			grandTotal :currentCart.grandTotal
+			}
+		});
+	},
+
 
 	/*
 	cartId
@@ -88,7 +140,7 @@ Meteor.methods({
 		_.each(params.items , function(item){
 			var prodItem = Products.findOne({code : item.code});
 			if(prodItem){
-				var cartItem = CartUtil.constructItem({code : prodItem.code, name : prodItem.name, price : prodItem.price, quantity : item.quantity});
+				var cartItem = CartUtil.constructItem(prodItem , item.quantity);
 				cart.items.push(cartItem);
 				cart.grandTotal += item.totalPrice;
 			}
@@ -105,11 +157,10 @@ Meteor.methods({
 		var cart = Carts.findOne({_id : new Mongo.ObjectID(params.cartId)});
 		var item = Products.findOne({code : params.code});
 		if(item){
-
 			var cartItem = _.find(cart.items, function(tmp){return tmp.code == params.code});
 			
 			if(!cartItem){
-				cartItem = CartUtil.constructItem({code : item.code, name : item.name, price : item.price, quantity : 0});
+				cartItem = CartUtil.constructItem(item,0);
 				cart.items.push(cartItem);
 			}
 

@@ -7,7 +7,8 @@ Template.catalogue.onCreated(function(){
         WebUtil.getCurrentParams();
         
         self.templateDictionary = new ReactiveDict();
-        self.templateDictionary.set( 'stateControl', {isEdit : false, allowEdit : true});
+        SecurityUtil.generateState(self);
+        //self.templateDictionary.set( 'stateControl', {isEdit : false, allowEdit : true});
         
         var parameters = WebUtil.getCurrentParams();
         var filter = {};
@@ -18,25 +19,17 @@ Template.catalogue.onCreated(function(){
 
         self.subscribe('products', filter);
         self.subscribe('productsCount', filter);
-
-       // console.log(Counts.get("productsCount"))
-
-        
     });   
 });
 
 /** LISTING PAGE **************************/
 Template.catalogue.events({
     "click .catalogue-button-edit": function (event, template) {
-    	var state = template.templateDictionary.get( 'stateControl');
-    	state.isEdit = true;
-    	template.templateDictionary.set( 'stateControl', state);
+        SecurityUtil.enableEdit(template);
     },
 
     "click .catalogue-button-done": function (event, template) {
-    	var state = template.templateDictionary.get( 'stateControl');
-    	state.isEdit = false;
-    	template.templateDictionary.set( 'stateControl', state);
+        SecurityUtil.disableEdit(template);
     },
 
     "click .catalogue-button-add": function (event, template) {
@@ -55,11 +48,11 @@ Template.catalogue.events({
 
 Template.catalogue.helpers({
 	isEdit : function(){
-        return Template.instance().templateDictionary.get( 'stateControl').isEdit;
+        return SecurityUtil.getStatecontrol(Template.instance()).isEdit;
     },
 
     stateControl : function(){
-        return Template.instance().templateDictionary.get( 'stateControl');
+        return SecurityUtil.getStatecontrol(Template.instance());
     },
 
     products : function(){

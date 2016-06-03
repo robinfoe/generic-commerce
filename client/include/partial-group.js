@@ -30,6 +30,16 @@ Template.includeNagivation.events({
 		Modal.show('userSecurity');
 	},
 
+	'click .sign-out-btn' : function(event,template){
+		
+		Meteor.logout(function(){
+			Session.clear();
+			CartUtil.generate(function(){Router.go('/')});
+		});
+		
+		//Router.go('/signout');
+	},
+
 	'click #user-dropdown' : function(event, template){
 		if($('#user-dropdown').hasClass('open'))
 			$('#user-dropdown').removeClass('open');

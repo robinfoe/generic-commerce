@@ -121,15 +121,14 @@ Template.userSecuritySignIn.events({
 			WebUtil.notify.error(errors);
 			return;
 		}
-//		console.log(email);
 
 		Meteor.loginWithPassword({username : email }, password, function(message){
-			console.log(message);
-      		if(message)
+			if(message)
       			WebUtil.notify.error('Invalid Login Information');
       		else{
       			WebUtil.notify.success('Welcome !!! ');
             	Modal.hide('userSecurity');
+            	Meteor.call(CONSTANT.METHOD.CART.MERGE_CART,{cartId : Session.get(CONSTANT.SESSION.CART)});
       		}
       	});
 	}

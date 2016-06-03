@@ -52,6 +52,10 @@ Meteor.publish('products', function(filter) {
 	var offset = (filter.pageNo -1) * WebUtil.CONSTANT.PAGINATION.RECORD_LIMIT;
 	delete filter.pageNo;
 	filter = filter || {};
+	//console.log(SecurityUtil.role.isWebAdmin());
+	if(!SecurityUtil.role.isWebAdmin(this.userId))
+		filter.published = 'Y';
+	//if(Meteor.user())
 
 
 	return Products.find(filter, {skip : offset , limit: WebUtil.CONSTANT.PAGINATION.RECORD_LIMIT, sort : {name : 1} });
@@ -61,6 +65,10 @@ Meteor.publish('productsCount', function(filter) {
 	// todo :: if login is not admin, need to use publish  = true
 	delete filter.pageNo;
 	filter = filter || {};
+	
+	if(!SecurityUtil.role.isWebAdmin(this.userId))
+		filter.published = 'Y';
+
 	Counts.publish(this, 'productsCount', Products.find(filter));
 //	return Products.find(filter);
 });

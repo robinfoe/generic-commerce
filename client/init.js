@@ -10,7 +10,7 @@ Meteor.startup(function() {
 		unloadTime = (isNaN(unloadTime)) ? 0 : unloadTime;
 
 		if(  ( (new Date().getTime()) -  unloadTime ) > 10000) // 10 seconds think time... 
-			Session.clearPersistent();
+			Session.clear();
 		
 		//2. generate id if empty... 
 		//Session.clearPersistent();
